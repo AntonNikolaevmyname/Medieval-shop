@@ -4,25 +4,49 @@ using UnityEngine;
 
 /*
 TO DO:
-    Баг: когда оружие в руках сталкивается с чем-то, то оно улетает вверх. PS вроде исправил, надо тестить.
-    Проблемы с названиями методов.
+    1. Баг: когда оружие в руках сталкивается с чем-то, то оно улетает вверх. PS вроде исправил, надо тестить.
+    2. Проблемы с названиями методов.
+    3. Переделать вращение колесиком мыши на вращение мышью. 
 */
 
 public class PlayerEquipmentSearcher : MonoBehaviour
 {
+    public static PlayerEquipmentSearcher instance = null;
     // Рисует raycast для поиска оружия.
-    public bool debug;
+    [SerializeField]
+    private bool debug;
     private bool isMouseUp = false;
 
     [SerializeField]
     private Transform equipParent;
     private Transform hitComponent = null;
-    float hc_xRotate = 0;
-    float hc_yRotate = 0;
+    // Углы кручения оружия.
+    // C колесиком мыши крутится только по Y.
+    private float hc_xRotate = 0f;
+    private float hc_yRotate = 0f;
+    private float hc_zRotate = 0f;
+
     private int layerMask;
     private float maxDistanceDrawRay = 10f;
-    private void OnEnable()
+    private float equipRotationSpeed = 10f;
+
+    public Transform HitComponent
     {
+        get
+        {
+            return hitComponent;
+        }
+    }
+    private void Start()
+    {
+        if(instance == null)
+        {
+           instance = this;
+        }
+        else
+        {
+            print($"Warning:{instance} is unknown object.");
+        }
         // Ищем с помощью raycast только по маске "оружия".
         layerMask = LayerMask.GetMask("Equipment");
     }
@@ -33,7 +57,14 @@ public class PlayerEquipmentSearcher : MonoBehaviour
         SearchEquip();
     }
 
-    private bool Equip (out RaycastHit hit, float fixed_y)
+    private void OnGUI()
+    {
+        if(hitComponent == null) 
+            return;
+              
+        GUI.TextField(new Rect(10, 10, 150, 100), hitComponent.name);
+    }
+    private bool GetRaycastHit (out RaycastHit hit, float fixed_y)
     {
        return Physics.Raycast(new Vector3(transform.position.x, 
                               transform.position.y + fixed_y,
@@ -41,12 +72,14 @@ public class PlayerEquipmentSearcher : MonoBehaviour
                               transform.TransformDirection(Vector3.forward), 
                               out hit, maxDistanceDrawRay, layerMask);
     }
+
+    // Пытаемся найти оружие возле себя.
     private void AttemptGetEquipment()
     {
         RaycastHit[] hit = new RaycastHit[3];
-        bool canEquip0 = Equip (out hit[0], 0f);
-        bool canEquip1 = Equip (out hit[1], 0.5f);
-        bool canEquip2 = Equip (out hit[2], 1f);
+        bool canEquip0 = GetRaycastHit (out hit[0], 0f);
+        bool canEquip1 = GetRaycastHit (out hit[1], 0.5f);
+        bool canEquip2 = GetRaycastHit (out hit[2], 1f);
         
         if( hit[0].transform == null && 
             hit[1].transform == null && 
@@ -92,9 +125,10 @@ public class PlayerEquipmentSearcher : MonoBehaviour
         if(Input.mouseScrollDelta == Vector2.zero) 
             return;
 
-        hc_xRotate += Input.mouseScrollDelta.x * 10;
-        hc_yRotate += Input.mouseScrollDelta.y * 10;
-        hitComponent.rotation = Quaternion.Euler(hc_xRotate, hc_yRotate, 0);
+        //hc_xRotate += Input.mouseScrollDelta.x * equipRotationSpeed;
+        // Крутится только по оси Y.
+        hc_yRotate += Input.mouseScrollDelta.y * equipRotationSpeed; 
+        hitComponent.rotation = Quaternion.Euler(hc_xRotate, hc_yRotate, hc_zRotate);
     }
 
     // TO DO: Переписать на кнопку по выбору.

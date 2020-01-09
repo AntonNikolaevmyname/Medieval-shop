@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swordName: test
   description: testtest123
-  icon: {fileID: 0}
-  goldCost: 0
-  attackDamage: 0
-  weight: 0
+  icon: {fileID: 21300000, guid: 49b611e658efbf443b686a4036f74fe3, type: 3}
+  goldCost: 100
+  attackDamage: 12
+  weight: 1
