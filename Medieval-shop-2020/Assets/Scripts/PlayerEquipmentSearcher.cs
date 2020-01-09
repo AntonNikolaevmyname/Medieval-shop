@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+TO DO:
+    Баг: когда оружие в руках сталкивается с чем-то, то оно улетает вверх. PS вроде исправил, надо тестить.
+    Проблемы с названиями методов.
+*/
 
 public class PlayerEquipmentSearcher : MonoBehaviour
 {
@@ -12,17 +17,22 @@ public class PlayerEquipmentSearcher : MonoBehaviour
     [SerializeField]
     private Transform equipParent;
     private Transform hitComponent = null;
+    float hc_xRotate = 0;
+    float hc_yRotate = 0;
     private int layerMask;
     private float maxDistanceDrawRay = 10f;
     private void OnEnable()
     {
+        // Ищем с помощью raycast только по маске "оружия".
         layerMask = LayerMask.GetMask("Equipment");
     }
+
     private void Update()
     {
         PlayerDebug(debug);
-        OnMouseOver();
+        SearchEquip();
     }
+
     private bool Equip (out RaycastHit hit, float fixed_y)
     {
        return Physics.Raycast(new Vector3(transform.position.x, 
@@ -56,14 +66,39 @@ public class PlayerEquipmentSearcher : MonoBehaviour
         {
             if(equipParent.childCount == 0)
             {
+                var hc_rigibody = hitComponent.GetComponent<Rigidbody>();
+
                 hitComponent.transform.SetParent(equipParent);
                 hitComponent.transform.localPosition = Vector3.zero;
-                hitComponent.GetComponent<Rigidbody>().useGravity = false;
+                hc_rigibody.drag = 10;
+                hc_rigibody.constraints = RigidbodyConstraints.FreezePositionY;
+                hc_rigibody.useGravity = false;
             }
         }
     }
-    
+    private void SearchEquip()
+    {
+        RotateEquip();
+        OnMouseOver();
+    }
+
+    // Дает возможность вращать оружие, если оно в "руках".
+    private void RotateEquip()
+    {
+        // Если ничего в руках нет.
+        if(hitComponent == null) 
+            return;
+        // Или колесо мыши не крутится.
+        if(Input.mouseScrollDelta == Vector2.zero) 
+            return;
+
+        hc_xRotate += Input.mouseScrollDelta.x * 10;
+        hc_yRotate += Input.mouseScrollDelta.y * 10;
+        hitComponent.rotation = Quaternion.Euler(hc_xRotate, hc_yRotate, 0);
+    }
+
     // TO DO: Переписать на кнопку по выбору.
+    // Полностью переписать с событиями, чтобы без бесконечных if было...
     private void OnMouseOver()
     {
         if(Input.GetMouseButtonDown(0))
@@ -76,7 +111,10 @@ public class PlayerEquipmentSearcher : MonoBehaviour
             isMouseUp = false;
             if(hitComponent != null)
             {
-                hitComponent.GetComponent<Rigidbody>().useGravity = true;
+                var hc_rigibody = hitComponent.GetComponent<Rigidbody>();
+                hc_rigibody.useGravity = true;
+                hc_rigibody.drag = 1;
+                hc_rigibody.constraints = RigidbodyConstraints.None;
                 hitComponent = null;
             }
             equipParent.DetachChildren();

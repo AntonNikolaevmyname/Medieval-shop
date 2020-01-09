@@ -291,14 +291,14 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 610077094}
   serializedVersion: 2
-  m_Mass: 100
-  m_Drag: 0
+  m_Mass: 25
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &610077096
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 895fa244125aa514782f672f5ff1e5fc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -774,7 +774,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1326441183}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.5}
+  m_LocalPosition: {x: 0, y: 0.6, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 968516597}
@@ -857,6 +857,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Billboard
+      objectReference: {fileID: 0}
+    - target: {fileID: 1143782845592578732, guid: 4bbe854eea2166047a2baffb32ab3bf7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 1143782845592578733, guid: 4bbe854eea2166047a2baffb32ab3bf7,
         type: 3}
@@ -961,6 +966,31 @@ PrefabInstance:
         \u0432\u0435\u0449\u0438\n\n- \u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\n\n
         anton.nikolaev.kazan\n@gmail.com"
       objectReference: {fileID: 0}
+    - target: {fileID: 1143782845088650271, guid: 4bbe854eea2166047a2baffb32ab3bf7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1143782845237342393, guid: 4bbe854eea2166047a2baffb32ab3bf7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1143782846921935231, guid: 4bbe854eea2166047a2baffb32ab3bf7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1143782846863834807, guid: 4bbe854eea2166047a2baffb32ab3bf7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1143782846820452099, guid: 4bbe854eea2166047a2baffb32ab3bf7,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4bbe854eea2166047a2baffb32ab3bf7, type: 3}
 --- !u!1001 &2642784382014186711
@@ -1043,6 +1073,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Flat Earth
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767844458823304450, guid: ad432f45e72b6804fb33cce7e3497d6a,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4767844458823304454, guid: ad432f45e72b6804fb33cce7e3497d6a,
         type: 3}
