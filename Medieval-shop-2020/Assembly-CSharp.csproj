@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\Equip.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\PlayerEquipmentSearcher.cs" />
+     <None Include="Assets\3DForge\FantasyExteriors\Village &amp; Towns\Documents\Blacksmith v1.0 - user guide.txt" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/DNS/Documents/GitHub/Medieval-shop/Medieval-shop-2020/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
