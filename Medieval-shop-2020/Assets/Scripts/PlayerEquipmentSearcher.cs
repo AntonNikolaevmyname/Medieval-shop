@@ -27,7 +27,7 @@ public class PlayerEquipmentSearcher : MonoBehaviour
     private float hc_zRotate = 0f;
 
     private int layerMask;
-    private float maxDistanceDrawRay = 10f;
+    private float maxDistanceDrawRay = 30f;
     private float equipRotationSpeed = 10f;
 
     public Transform HitComponent
@@ -59,17 +59,17 @@ public class PlayerEquipmentSearcher : MonoBehaviour
 
     private void OnGUI()
     {
-        if(hitComponent == null) 
-            return;
+        //if(hitComponent == null) 
+            //return;
               
-        GUI.TextField(new Rect(10, 10, 150, 100), hitComponent.name);
+        GUI.TextField(new Rect(10, 10, 150, 100), (Camera.main.transform.forward * maxDistanceDrawRay).ToString());
     }
     private bool GetRaycastHit (out RaycastHit hit, float fixed_y)
     {
        return Physics.Raycast(new Vector3(transform.position.x, 
                               transform.position.y + fixed_y,
                               transform.position.z), 
-                              transform.TransformDirection(Vector3.forward), 
+                              transform.TransformDirection(Camera.main.transform.forward), 
                               out hit, maxDistanceDrawRay, layerMask);
     }
 
@@ -159,11 +159,13 @@ public class PlayerEquipmentSearcher : MonoBehaviour
         if(!debug) return;
 
         float fixed_y = 0;
+        Vector3 direction = Camera.main.transform.forward * maxDistanceDrawRay;
         for(int i = 0; i < 3;i++)
         {
-            Debug.DrawRay(new Vector3(transform.position.x, transform.position.y + fixed_y,
-                                  transform.position.z), 
-                                  transform.TransformDirection(Vector3.forward) * maxDistanceDrawRay, 
+            Debug.DrawRay(new Vector3(Camera.main.transform.position.x, 
+                              Camera.main.transform.position.y + fixed_y,
+                              Camera.main.transform.position.z), 
+                                  transform.TransformDirection(direction), 
                                   Color.yellow);
             fixed_y += 0.5f;
         }
