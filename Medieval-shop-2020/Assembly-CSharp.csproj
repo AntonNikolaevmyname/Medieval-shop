@@ -54,8 +54,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\DefaultEquipObject.cs" />
-     <Compile Include="Assets\Scripts\DefaultSword.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\PlayerRecourseController.cs" />
      <Compile Include="Assets\Scripts\SearchSceneObjectsToInteract.cs" />
      <None Include="Assets\3DForge\FantasyExteriors\Village &amp; Towns\Documents\Blacksmith v1.0 - user guide.txt" />
  <Reference Include="Unity.TextMeshPro.Editor">

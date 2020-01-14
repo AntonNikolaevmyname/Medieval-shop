@@ -34,7 +34,7 @@ namespace CompleteApp
         public string Description{get => _description;}
         public Sprite Icon{get => _icon;}
         public int GoldCost{get => _goldCost;}
-        public float Damage{get => _damage;}
+        public float Damage{get => _damage;}                        // Отрицательная атака == лечение.
         public float Weight{get => _weight;}
     }
 }
