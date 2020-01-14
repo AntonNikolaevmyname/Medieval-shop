@@ -7,84 +7,88 @@ using UnityEngine;
 с объектами, у которых Layer выставлен Equipment.
 После нахождения объекта взаимодействия все дальнейшее управление переходит в GameManager.
 */
-public class SearchSceneObjectsToInteract : MonoBehaviour
+namespace CompleteApp
 {
-    private const int _hitsCount = 5;                   // Количество испускаемых лучей.
-    private const float _distanceBetweenRays = 0.4f;    // Расстояние по Y между лучами Raycast'ов.
-    private const float _drawRayDistance = 10f;         // Дальность прорисовки лучей.
+    public class SearchSceneObjectsToInteract : MonoBehaviour
+    {  
+        private const int _hitsCount = 3;                   // Количество испускаемых лучей.
+        private const float _distanceBetweenRays = 0.5f;    // Расстояние по Y между лучами Raycast'ов.
+        private const float _drawRayDistance = 5f;         // Дальность прорисовки лучей.
+              
+        private Camera _mainCamera;
+        private Transform _hitComponent = null;
+        // Маска предметов для взаимодействия, остальные лучи игнорируют.
+        private int _layerMask;
+        private float _maxDistanceDrawRay = 10f;    
 
-    private Camera _mainCamera;
-    private Transform _hitComponent = null;
-    // Маска предметов для взаимодействия, остальные лучи игнорируют.
-    private int _layerMask;
-    private float _maxDistanceDrawRay = 10f;    
-
-    private void Awake()
-    {
-        // Инициализация.
-        _layerMask = LayerMask.GetMask("Equipment");
-        _mainCamera = Camera.main;
-    }
-
-    private void Start()
-    {
-
-    }
-
-    private void Update()
-    {
-        TryingToFindObjectsToInteractWith();
-    }
-
-    // Поиск объектов для взаимодействия.
-    private void TryingToFindObjectsToInteractWith()
-    {
-        RaycastHit[] _hits  = new RaycastHit[_hitsCount];
-
-        for(int numberRay = 0; numberRay < _hitsCount; numberRay++)
+        private void Start()
         {
-            MakeRaycast(out _hits[numberRay], numberRay);
-            if(_hits[numberRay].transform != null)
-            {   
-                print($"Нашли объект {_hits[numberRay].transform.name}");
-                
-                _hitComponent = _hits[numberRay].transform.GetComponent <Transform> (); 
-                InteractWithHitObject();
-                break;
+            string lmn = GameManager.instance.LayerMaskName;
+            
+            // Инициализация.
+            _layerMask = LayerMask.GetMask(lmn);
+            _mainCamera = Camera.main;
+        }
+
+        private void Update()
+        {
+            TryingToFindObjectsToInteractWith();
+        }
+
+        // Поиск объектов для взаимодействия.
+        private void TryingToFindObjectsToInteractWith()
+        {
+            RaycastHit[] _hits  = new RaycastHit[_hitsCount];
+
+            for(int numberRay = 0; numberRay < _hitsCount; numberRay++)
+            {
+                MakeRaycast(out _hits[numberRay], numberRay);
+                // Если любой из лучей "нашел" нужный объект.
+                if(_hits[numberRay].transform != null)
+                {   
+                    _hitComponent = _hits[numberRay].transform.GetComponent <Transform> (); 
+                    InteractWithHitObject();
+                    return;
+                }
+            }
+
+            GameManager.instance.HitComponentIsNull();
+        }
+
+        // Когда нашли объект для взаимодействия, то передаем управление в GameManager.
+        private void InteractWithHitObject()
+        {
+            GameManager.instance.InteractWithHitObject<Transform>(_hitComponent);
+        }
+
+        // Метод рисования 1 луча.
+        private void MakeRaycast(out RaycastHit hit, int numberRay)
+        {   
+            // Направление лучей должно совпадать с взгядом игрока через камеру.
+            Vector3 direction = new Vector3(Camera.main.transform.forward.x, Camera.main.transform.forward.y, Vector3.forward.z);
+
+            if (Physics.Raycast(transform.position, transform.TransformDirection(direction), 
+                out hit, _drawRayDistance, _layerMask))
+            {
+                DebugDrawRayInScene(direction, numberRay, Color.yellow);
+            }
+            else
+            {
+                DebugDrawRayInScene(direction, numberRay, Color.white);
             }
         }
-    }
 
-    // Когда нашли объект для взаимодействия, то передаем управление в GameManager.
-    private void InteractWithHitObject()
-    {
-        GameManager.instance.InteractWithHitObject(_hitComponent);
-    }
-
-    // Метод рисования 1 луча.
-    private void MakeRaycast(out RaycastHit hit, int numberRay)
-    {   
-        Vector3 direction = new Vector3(Camera.main.transform.forward.x, Camera.main.transform.forward.y, Vector3.forward.z);
-
-        if (Physics.Raycast(transform.position, transform.TransformDirection(direction), 
-            out hit, _drawRayDistance, _layerMask))
+        private void DebugDrawRayInScene(Vector3 direction, int numberRay, Color color)
         {
+            if(GameManager.instance.Debug == false)
+                    return;
+
             Debug.DrawRay(
                 new Vector3(Camera.main.transform.position.x, 
                             Camera.main.transform.position.y + _distanceBetweenRays * numberRay,
                             Camera.main.transform.position.z), 
                 transform.TransformDirection(direction) * _drawRayDistance, 
-                Color.yellow
-                );
-        }
-        else
-        {
-            Debug.DrawRay(
-                new Vector3(Camera.main.transform.position.x, 
-                            Camera.main.transform.position.y + _distanceBetweenRays * numberRay,
-                            Camera.main.transform.position.z), 
-                transform.TransformDirection(direction) * _drawRayDistance, 
-                Color.white
+                color
             );
         }
     }

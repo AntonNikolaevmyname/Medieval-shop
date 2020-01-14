@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New Sword", menuName = "Default Sword", order = 51)]
+
 public class DefaultSword : ScriptableObject
 {
     [SerializeField]
