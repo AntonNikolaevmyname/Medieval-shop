@@ -64,10 +64,10 @@ namespace CompleteApp
         // Метод рисования 1 луча.
         private void MakeRaycast(out RaycastHit hit, int numberRay)
         {   
-            // Направление лучей должно совпадать с взгядом игрока через камеру.
-            Vector3 direction = new Vector3(Camera.main.transform.forward.x, Camera.main.transform.forward.y, Vector3.forward.z);
+            // Направление лучей должно совпадать со взгядом игрока через камеру.
+            Vector3 direction = Camera.main.transform.forward; 
 
-            if (Physics.Raycast(transform.position, transform.TransformDirection(direction), 
+            if (Physics.Raycast(Camera.main.transform.position, direction,
                 out hit, _drawRayDistance, _layerMask))
             {
                 DebugDrawRayInScene(direction, numberRay, Color.yellow);
@@ -87,7 +87,7 @@ namespace CompleteApp
                 new Vector3(Camera.main.transform.position.x, 
                             Camera.main.transform.position.y + _distanceBetweenRays * numberRay,
                             Camera.main.transform.position.z), 
-                transform.TransformDirection(direction) * _drawRayDistance, 
+                direction * _drawRayDistance, 
                 color
             );
         }
