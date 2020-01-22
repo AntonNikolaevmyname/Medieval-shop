@@ -8,7 +8,7 @@
 namespace CompleteApp
 {
     [CreateAssetMenu(fileName = "New Equip Object", menuName = "Equip Object", order = 51)]
-    public class DefaultEquipObject : ScriptableObject
+    internal class DefaultEquipObject : ScriptableObject
     {
         [SerializeField]
         private AttackTypeEnum _attackType; 

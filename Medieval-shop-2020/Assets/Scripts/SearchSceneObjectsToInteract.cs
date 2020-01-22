@@ -9,7 +9,7 @@ using UnityEngine;
 */
 namespace CompleteApp
 {
-    public class SearchSceneObjectsToInteract : MonoBehaviour
+    internal sealed class SearchSceneObjectsToInteract : MonoBehaviour
     {  
         private const int _hitsCount = 3;                   // Количество испускаемых лучей.
         private const float _distanceBetweenRays = 0.5f;    // Расстояние по Y между лучами Raycast'ов.
@@ -23,7 +23,7 @@ namespace CompleteApp
 
         private void Start()
         {
-            string lmn = GameManager.instance.LayerMaskName;
+            string lmn = GameManager.Instance.LayerMaskName;
             
             // Инициализация.
             _layerMask = LayerMask.GetMask(lmn);
@@ -52,13 +52,13 @@ namespace CompleteApp
                 }
             }
 
-            GameManager.instance.HitComponentIsNull();
+            GameManager.Instance.HitComponentIsNull();
         }
 
         // Когда нашли объект для взаимодействия, то передаем управление в GameManager.
         private void InteractWithHitObject()
         {
-            GameManager.instance.InteractWithHitObject<Transform>(_hitComponent);
+            GameManager.Instance.InteractWithHitObject<Transform>(_hitComponent);
         }
 
         // Метод рисования 1 луча.
@@ -80,7 +80,7 @@ namespace CompleteApp
 
         private void DebugDrawRayInScene(Vector3 direction, int numberRay, Color color)
         {
-            if(GameManager.instance.Debug == false)
+            if(GameManager.Instance.Debug == false)
                     return;
 
             Debug.DrawRay(

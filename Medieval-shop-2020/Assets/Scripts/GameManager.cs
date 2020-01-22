@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /*
     TO DO: оптимизировать механизм поиска информации о текущем hitComponet из ScriptableObject'ов.
@@ -8,10 +6,11 @@ using UnityEngine;
 
 namespace CompleteApp
 {
-    public class GameManager : MonoBehaviour
+    internal sealed class GameManager : MonoBehaviour
     {
-        public static GameManager instance = null;
-        private Transform _hitComponent = null;
+        public static GameManager Instance{get; private set;} 
+
+        private Transform _hitComponent;
         private PlayerRecourseController _player;
 
         [Tooltip("Покупка/действие на сцене")]
@@ -47,13 +46,13 @@ namespace CompleteApp
 
         private void Awake()
         {
-            if(instance == null)
+            if(Instance == null)
             {
-                instance = this;
+                Instance = this;
             }
             else
             {
-                print($"Warning:{instance} is unknown object.");
+                print($"Warning:{Instance} is unknown object.");
             }
         }
 

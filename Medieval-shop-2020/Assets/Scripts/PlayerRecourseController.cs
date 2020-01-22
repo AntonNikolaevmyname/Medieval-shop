@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace CompleteApp
 {
     // Класс PlayerRecourseController управляет всеми русурсами игрока
     // такими как: инвентарь, деньги и тд.
     // Данное представление примитивное отображение инвентаря и механики его работы.
-    public class PlayerRecourseController
+    internal sealed class PlayerRecourseController
     {
-        private int _money;
         public int Money{get;set;}
 
         // Слоты инвентаря. 
