@@ -11,22 +11,21 @@ namespace CompleteApp
 {
     internal sealed class SearchSceneObjectsToInteract : MonoBehaviour
     {  
-        private const int _hitsCount = 3;                   // Количество испускаемых лучей.
+        private const int _hitsCount = 1;                   // Количество испускаемых лучей.
         private const float _distanceBetweenRays = 0.5f;    // Расстояние по Y между лучами Raycast'ов.
         private const float _drawRayDistance = 5f;         // Дальность прорисовки лучей.
               
         private Camera _mainCamera;
-        private Transform _hitComponent = null;
+        private Transform _hitComponent;
         // Маска предметов для взаимодействия, остальные лучи игнорируют.
         private int _layerMask;
         private float _maxDistanceDrawRay = 10f;    
 
         private void Start()
         {
-            string lmn = GameManager.Instance.LayerMaskName;
-            
+            string lm = GameManager.Instance.LayerMaskName;
             // Инициализация.
-            _layerMask = LayerMask.GetMask(lmn);
+            _layerMask = LayerMask.GetMask(lm);
             _mainCamera = Camera.main;
         }
 
@@ -52,7 +51,7 @@ namespace CompleteApp
                 }
             }
 
-            GameManager.Instance.HitComponentIsNull();
+            GameManager.Instance.HitComponentMakeNull();
         }
 
         // Когда нашли объект для взаимодействия, то передаем управление в GameManager.

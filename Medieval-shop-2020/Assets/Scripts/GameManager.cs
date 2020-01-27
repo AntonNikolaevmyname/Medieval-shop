@@ -12,38 +12,28 @@ namespace CompleteApp
 
         private Transform _hitComponent;
         private PlayerRecourseController _player;
+        public PlayerRecourseController Player{get => _player; private set => _player = value;}
 
         [Tooltip("Покупка/действие на сцене")]
         public KeyCode action = KeyCode.E;
         [Tooltip("Инвентарь")]
         public KeyCode inventory = KeyCode.Q;
-        private string _pressAction;
         // Режим отладки, рисует лучи, вывод дополнительной информации в консоль.
         [SerializeField]
         [Tooltip("Режим отладки")]
         private bool _debug;
-        public bool Debug{get => _debug;}
-
-        [SerializeField]
-        [Tooltip("Имя маски слоя объектов для взаимодействия")]
-        private string _layerMaskName = "Equipment"; 
-        public string LayerMaskName{get => _layerMaskName;}
+        public bool Debug{get => _debug; private set => _debug = value;}
+        public string LayerMaskName{get; private set;} = "Equipment";
 
         [SerializeField]
         [Tooltip("Все ScriptableObject'ы должны быть здесь")]
         private DefaultEquipObject[]  _defaultEquipObjects;
         private DefaultEquipObject _currentDEO;
-        private string _userConsole;
-        public string UserConsole
+        public DefaultEquipObject CurrentDefaultEquipObject
         {
-            get => _userConsole;
-            set
-            {
-                if(value != null)
-                    _userConsole = value;
-            }
+            get => _currentDEO;
         }
-
+        
         private void Awake()
         {
             if(Instance == null)
@@ -54,34 +44,22 @@ namespace CompleteApp
             {
                 print($"Warning:{Instance} is unknown object.");
             }
-        }
 
-        private void Start()
-        {
             // Инициализация.
-            _userConsole = string.Empty;
-            _player = new PlayerRecourseController();
-            _player.Money = 10000;
-            _pressAction = $"Нажмите {action} для покупки";
+            Player = new PlayerRecourseController()
+            {
+                Money = 10000
+            };
         }
 
-        private void OnGUI()
-        {
-            // Чеканные монеты игрока.
-            GUI.TextField(new Rect(10, 10, 200, 50), $"Money: {_player.Money}");
-            if(_userConsole == string.Empty)
-                return;
 
-            // Пользовательская консоль.
-            GUI.TextField(new Rect(10, 100, 200, 150), _userConsole);
-        }
         private void Update()
         {
             CheckInventoryClick();
 
             if(_hitComponent == null)
             {
-                _userConsole = string.Empty;
+                UserConsole.Instance.UserConsoleText = string.Empty;
                 return;
             }
 
@@ -106,7 +84,7 @@ namespace CompleteApp
             UserConsoleOutput();
         }
         // Если raycast'ы ничего не нашли.
-        public void HitComponentIsNull()
+        public void HitComponentMakeNull()
         {
             _hitComponent = null;
         }
@@ -124,14 +102,7 @@ namespace CompleteApp
                 if(_defaultEquipObjects[i].Name == _hitComponent.name)
                 {
                     _currentDEO = _defaultEquipObjects[i];
-
-                    _userConsole = $"Name:{_defaultEquipObjects[i].Name}\n"+
-                    $"Goldcost:{_defaultEquipObjects[i].GoldCost}\n"+
-                    $"Damage:{_defaultEquipObjects[i].Damage}\n"+
-                    $"AttackType:{_defaultEquipObjects[i].AttackType}\n"+
-                    $"Description:{_defaultEquipObjects[i].Description}\n"+
-                    $"Weight:{_defaultEquipObjects[i].Weight}\n\n\n"+
-                    $"*****{_pressAction}*****";
+                    UserConsole.Instance.PrintIntoUserConsoleEquipInfo(CurrentDefaultEquipObject, action);
                     return;
                 }
             }
@@ -145,10 +116,10 @@ namespace CompleteApp
         {
             if(Input.GetKeyDown(action))
             {
-                if(_player.Money >= _currentDEO.GoldCost)
+                if(Player.Money >= _currentDEO.GoldCost)
                 {
-                    _player.Money -= _currentDEO.GoldCost;
-                    _player.AddEquipInInventory(_currentDEO);
+                    Player.Money -= _currentDEO.GoldCost;
+                    Player.AddEquipInInventory(_currentDEO);
                     print($"{_hitComponent.name} удачно добавлен в инвентарь.");
                     _hitComponent = null;
                 }
@@ -163,7 +134,7 @@ namespace CompleteApp
         {
             if(Input.GetKeyDown(inventory))
             {
-                string[] inv = _player.InventoryObjectsNameEnumeration;
+                string[] inv = Player.InventoryObjectsNameEnumeration;
                 if(inv.Length == 0)
                 {
                     print($"Инвентарь пуст.");
