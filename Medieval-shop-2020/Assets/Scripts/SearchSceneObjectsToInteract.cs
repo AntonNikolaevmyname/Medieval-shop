@@ -19,11 +19,13 @@ namespace CompleteApp
         private Transform _hitComponent;
         // Маска предметов для взаимодействия, остальные лучи игнорируют.
         private int _layerMask;
-        private float _maxDistanceDrawRay = 10f;    
+        private float _maxDistanceDrawRay = 10f;
+
+        public Transform HitComponent { get => _hitComponent; set => _hitComponent = value; }
 
         private void Start()
         {
-            string lm = GameManager.Instance.LayerMaskName;
+            string lm = Params.Instance.EquipLayerMask;
             // Инициализация.
             _layerMask = LayerMask.GetMask(lm);
             _mainCamera = Camera.main;
@@ -45,19 +47,19 @@ namespace CompleteApp
                 // Если любой из лучей "нашел" нужный объект.
                 if(_hits[numberRay].transform != null)
                 {   
-                    _hitComponent = _hits[numberRay].transform.GetComponent <Transform> (); 
+                    HitComponent = _hits[numberRay].transform.GetComponent <Transform> (); 
                     InteractWithHitObject();
                     return;
                 }
             }
 
-            GameManager.Instance.HitComponentMakeNull();
+            GameManager.Instance.HitComponent = null;
         }
 
         // Когда нашли объект для взаимодействия, то передаем управление в GameManager.
         private void InteractWithHitObject()
         {
-            GameManager.Instance.InteractWithHitObject<Transform>(_hitComponent);
+            GameManager.Instance.InteractWithHitObject<Transform>(HitComponent);
         }
 
         // Метод рисования 1 луча.

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
 
 namespace CompleteApp
 {
@@ -12,13 +14,12 @@ namespace CompleteApp
         public string UserConsoleText
         {
             get => _userConsoleText;
-            // string.Empty не равно null
             set
             {
                 if(value != null)
                     _userConsoleText = value;
                 else 
-                    print($"Нельзя задать null для UserConsoleText");
+                    _userConsoleText = string.Empty;
             }
         }
 
@@ -48,22 +49,33 @@ namespace CompleteApp
             GUI.TextField(new Rect(10, 100, 200, 150), UserConsoleText);
         }
 
-        public void PrintIntoUserConsoleEquipInfo(DefaultEquipObject deo, KeyCode action)
+        public void PrintIntoUserConsoleEquipInfo(Transform t)
         {
-            if(deo == null)
+            if(t == null)
             {
-                print($"Нельзя вывести информацию о DefaultEquipObject равном null");
+                print($"Нельзя вывести информацию о {t.GetType()} равном null");
                 return;
             }
 
-            string pressAction = $"Нажмите {action} для покупки";
-            UserConsoleText = $"Name:{deo.Name}\n"+
-                    $"Goldcost:{deo.GoldCost}\n"+
-                    $"Damage:{deo.Damage}\n"+
-                    $"AttackType:{deo.AttackType}\n"+
-                    $"Description:{deo.Description}\n"+
-                    $"Weight:{deo.Weight}\n\n\n"+
-                    $"*****{pressAction}*****";
+            try
+            {
+                DefaultEquipObject deo = Params.Instance.defaultEquipObject
+                                        .First(s => s.Name == t.name);
+
+                string pressAction = $"Нажмите {Params.Instance.ActionButton} для покупки";
+                UserConsoleText = $"Name:{deo.Name}\n"+
+                        $"Goldcost:{deo.GoldCost}\n"+
+                        $"Damage:{deo.Damage}\n"+
+                        $"AttackType:{deo.AttackType}\n"+
+                        $"Description:{deo.Description}\n"+
+                        $"Weight:{deo.Weight}\n\n\n"+
+                        $"*****{pressAction}*****";
+            }
+            catch(Exception e)
+            {
+                print($"Class UserConsole: {e.Message}");
+            }
+
         }
     }
 }

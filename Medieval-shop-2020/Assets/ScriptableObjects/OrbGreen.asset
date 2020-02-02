@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OrbGreen
   m_EditorClassIdentifier: 
   _attackType: 0
-  _name: Orb Green
+  _name: "\u0417\u0435\u043B\u0435\u043D\u044B\u0439 \u0448\u0430\u0440"
   _description: "\u0421\u0430\u043C\u044B\u0439 \u0437\u0435\u043B\u0435\u043D\u044B\u0439
     \u0448\u0430\u0440."
   _icon: {fileID: 0}

@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 3336522}
   - component: {fileID: 2351664}
   - component: {fileID: 4580247161792445204}
-  m_Layer: 0
+  - component: {fileID: 2876222620396400668}
+  m_Layer: 9
   m_Name: wand05_blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,13 +27,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 129130}
-  m_LocalRotation: {x: 0.000000115202326, y: 0.7071068, z: 0.7071068, w: -0.000000115202326}
+  m_LocalRotation: {x: -0.00000019861236, y: 0.7071068, z: 0.7071068, w: 0.00000019861236}
   m_LocalPosition: {x: 0.022971466, y: 0, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90.00001, y: 0, z: 179.99998}
 --- !u!33 &3336522
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -91,3 +92,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.061506934, y: 0.43418774, z: 0.061734326}
   m_Center: {x: 0.0036834013, y: 0.12670654, z: -0.0013518014}
+--- !u!114 &2876222620396400668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d92643e85869f948aa589b373d00664, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultEquipObject: {fileID: 11400000, guid: 2c0a77277852c25499075f4db3609450, type: 2}
