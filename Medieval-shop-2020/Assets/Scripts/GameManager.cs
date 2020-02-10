@@ -1,25 +1,20 @@
 ﻿using UnityEngine;
 using System;
+using UnityEditor;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CompleteApp
 {
     internal sealed class GameManager : MonoBehaviour
     {
-        public static GameManager Instance{get; private set;} 
+        public static GameManager Instance { get; private set; } 
 
-        public static event Action<Transform> OnLookAtAnyEquip = delegate{};
+        public event Action<Transform> OnLookAtAnyInteractObject = delegate{};      
 
-
-        private Transform _hitComponent;
-        private PlayerRecourseController _player;
-        public PlayerRecourseController Player {get => _player; private set => _player = value;}
-
-
-        [SerializeField]
-        [Tooltip("Режим отладки")]
-        private bool _debug;
-        public bool Debug {get => _debug; private set => _debug = value;}
-        public Transform HitComponent { get => _hitComponent; set => _hitComponent = value; }
+        public Transform InteractObject { get; set; }
+        public string InteractObjectId { get; private set;}
 
         private void Awake()
         {
@@ -31,34 +26,42 @@ namespace CompleteApp
             {
                 print($"Warning:{Instance} is unknown object.");
             }
-
-            // Инициализация.
-            Player = new PlayerRecourseController()
-            {
-                Money = Params.Instance.PlayerMoney
-            };
+            //List<InteractObjectDefault> a = FindAllScriptableObject<InteractObjectDefault>();
         }
-
 
         private void Update()
         {
-            if(HitComponent == null)
-            {
-                UserConsole.Instance.UserConsoleText = null;
-                return;
-            }
+
         }
+
 
         public void InteractWithHitObject<T>(T hit) where T: Transform
         {
             if(hit == null)
             {
-                print($"Class GameManager. Method 'InteractWithHitObject'. Exception: hit is null");
+                InteractObject = null;
                 return;
             }
             
-            HitComponent = hit;
-            OnLookAtAnyEquip(HitComponent);
+            if(hit.Equals(InteractObject))
+            return;
+
+            InteractObject = hit;
+            OnLookAtAnyInteractObject(InteractObject);
+        }
+
+        public void GetInteractObjectID(string id)
+        {
+            if(id == null)
+            return;
+
+            InteractObjectId = id;
+            // Сообщить UIManager'y для вывода инфы.
+        }
+
+        private List<T> FindAllScriptableObject<T>()
+        {           
+            return Resources.LoadAll("ScriptableObjectes", typeof(T)).Cast<T>().ToList();
         }
     }
 }

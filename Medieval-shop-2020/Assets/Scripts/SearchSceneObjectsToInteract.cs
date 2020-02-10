@@ -11,21 +11,17 @@ namespace CompleteApp
 {
     internal sealed class SearchSceneObjectsToInteract : MonoBehaviour
     {  
-        private const int _hitsCount = 1;                   // Количество испускаемых лучей.
-        private const float _distanceBetweenRays = 0.5f;    // Расстояние по Y между лучами Raycast'ов.
-        private const float _drawRayDistance = 5f;         // Дальность прорисовки лучей.
+        private readonly float _drawRayDistance = 5f;         // Дальность прорисовки луча.
               
         private Camera _mainCamera;
-        private Transform _hitComponent;
         // Маска предметов для взаимодействия, остальные лучи игнорируют.
         private int _layerMask;
-        private float _maxDistanceDrawRay = 10f;
 
-        public Transform HitComponent { get => _hitComponent; set => _hitComponent = value; }
+        public Transform HitComponent { get;set; }
 
-        private void Start()
+        private void Awake()
         {
-            string lm = Params.Instance.EquipLayerMask;
+            string lm = "InteractObject";
             // Инициализация.
             _layerMask = LayerMask.GetMask(lm);
             _mainCamera = Camera.main;
@@ -39,31 +35,23 @@ namespace CompleteApp
         // Поиск объектов для взаимодействия.
         private void TryingToFindObjectsToInteractWith()
         {
-            RaycastHit[] _hits  = new RaycastHit[_hitsCount];
+            RaycastHit hit;
+            MakeRaycast(out hit);
 
-            for(int numberRay = 0; numberRay < _hitsCount; numberRay++)
-            {
-                MakeRaycast(out _hits[numberRay], numberRay);
-                // Если любой из лучей "нашел" нужный объект.
-                if(_hits[numberRay].transform != null)
-                {   
-                    HitComponent = _hits[numberRay].transform.GetComponent <Transform> (); 
-                    InteractWithHitObject();
-                    return;
-                }
+            // Если луч "нашел" нужный объект.
+            if(hit.transform != null)
+            {   
+                // Когда нашли объект для взаимодействия, то передаем управление в GameManager.
+                HitComponent = hit.transform.GetComponent <Transform> (); 
+                GameManager.Instance.InteractWithHitObject<Transform>(HitComponent);
+                return;
             }
 
-            GameManager.Instance.HitComponent = null;
+            GameManager.Instance.InteractWithHitObject<Transform>(null);
         }
 
-        // Когда нашли объект для взаимодействия, то передаем управление в GameManager.
-        private void InteractWithHitObject()
-        {
-            GameManager.Instance.InteractWithHitObject<Transform>(HitComponent);
-        }
-
-        // Метод рисования 1 луча.
-        private void MakeRaycast(out RaycastHit hit, int numberRay)
+        
+        private void MakeRaycast(out RaycastHit hit)
         {   
             // Направление лучей должно совпадать со взгядом игрока через камеру.
             Vector3 direction = Camera.main.transform.forward; 
@@ -71,22 +59,23 @@ namespace CompleteApp
             if (Physics.Raycast(Camera.main.transform.position, direction,
                 out hit, _drawRayDistance, _layerMask))
             {
-                DebugDrawRayInScene(direction, numberRay, Color.yellow);
+                #if UNITY_EDITOR
+                DebugDrawRayInScene(direction, Color.red);
+                #endif
             }
             else
             {
-                DebugDrawRayInScene(direction, numberRay, Color.white);
+                #if UNITY_EDITOR
+                DebugDrawRayInScene(direction, Color.white);
+                #endif
             }
         }
 
-        private void DebugDrawRayInScene(Vector3 direction, int numberRay, Color color)
+        private void DebugDrawRayInScene(Vector3 direction, Color color)
         {
-            if(GameManager.Instance.Debug == false)
-                    return;
-
             Debug.DrawRay(
                 new Vector3(Camera.main.transform.position.x, 
-                            Camera.main.transform.position.y + _distanceBetweenRays * numberRay,
+                            Camera.main.transform.position.y,
                             Camera.main.transform.position.z), 
                 direction * _drawRayDistance, 
                 color

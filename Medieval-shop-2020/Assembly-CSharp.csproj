@@ -53,15 +53,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\DefaultEquipObject.cs" />
-     <Compile Include="Assets\Scripts\EquipScript.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
-     <Compile Include="Assets\Scripts\Params.cs" />
-     <Compile Include="Assets\Scripts\PlayerRecourseController.cs" />
+     <Compile Include="Assets\Scripts\InteractObjectDefault.cs" />
+     <Compile Include="Assets\Scripts\InteractObjectScript.cs" />
      <Compile Include="Assets\Scripts\SearchSceneObjectsToInteract.cs" />
-     <Compile Include="Assets\Scripts\SomeTests.cs" />
      <Compile Include="Assets\Scripts\UIManager.cs" />
-     <Compile Include="Assets\Scripts\UserConsole.cs" />
      <None Include="Assets\3DForge\FantasyExteriors\Village &amp; Towns\Documents\Blacksmith v1.0 - user guide.txt" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/DNS/Documents/GitHub/Medieval-shop/Medieval-shop-2020/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

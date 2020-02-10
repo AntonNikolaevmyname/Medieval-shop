@@ -104,4 +104,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d92643e85869f948aa589b373d00664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultEquipObject: {fileID: 11400000, guid: 2c0a77277852c25499075f4db3609450, type: 2}
