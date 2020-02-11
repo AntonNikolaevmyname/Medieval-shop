@@ -22,8 +22,7 @@ namespace CompleteApp
                 text.text = "";
                 return;
             }
-            string s = GameManager.Instance.GetCurrentInteractObject().Name;
-            text.text = s;
+            text.text = GameManager.Instance.GetCurrentInteractObject().Name;
         }
     }
 }

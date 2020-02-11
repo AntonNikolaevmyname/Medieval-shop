@@ -9,6 +9,8 @@ namespace CompleteApp
 {
     internal sealed class GameManager : MonoBehaviour, INotifyPropertyChanged
     {
+        private const string PathSOs = "ScriptableObjects";
+
         public static GameManager Instance { get; private set; } 
 
         public event Action<Transform> OnLookAtAnyInteractObject = delegate{};
@@ -32,9 +34,8 @@ namespace CompleteApp
             }
 
             // Инициализация.
-            var collection = FindAllScriptableObjects<InteractObjectDefault>("ScriptableObjects");
-            print(collection.Length);
-            print(collection.GetType());
+            IDInteractObjectsDict = new Dictionary<string, InteractObjectDefault>();
+            var collection = FindAllScriptableObjects<InteractObjectDefault>(PathSOs);
             // Храним данные в словаре для доступа по ключу к объектам.
             foreach (var item in collection)
             {
@@ -76,6 +77,9 @@ namespace CompleteApp
         
         public InteractObjectDefault GetCurrentInteractObject()
         {
+            if(IDInteractObjectsDict[InteractObjectId] == null)
+                return null;
+                
             return IDInteractObjectsDict[InteractObjectId];
         }
 
@@ -85,7 +89,7 @@ namespace CompleteApp
         }
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")  
-        {  
+        { 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         } 
     }
