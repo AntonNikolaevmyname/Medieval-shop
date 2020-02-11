@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System;
-using System.Runtime.InteropServices;
 
 /*
     Имя объекта на сцене, с которым будет взаимодействовать игрок, должно

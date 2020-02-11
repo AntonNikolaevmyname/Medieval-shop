@@ -17,8 +17,9 @@ namespace CompleteApp
 
         private void OnLookAtThisInteractObject(Transform t)
         {
+            // ReferenceEquls?
             if(t.Equals(this.gameObject.transform))
-                GameManager.Instance.GetInteractObjectID(id);
+                GameManager.Instance.SetInteractObjectID(id);
         }
     }
 }
